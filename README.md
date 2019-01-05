@@ -1,1 +1,1 @@
-# java-deeplearning-from-scratch
+# Programming Machine Learning Algorithms by yourself from scratch
