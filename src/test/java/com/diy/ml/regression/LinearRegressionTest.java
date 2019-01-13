@@ -14,7 +14,7 @@ public class LinearRegressionTest {
 
 
     @Test
-    public void computeCostTestCase1() {
+    public void computeCostSingleTestCase1() {
         double[] training = {1, 2, 1, 3, 1, 4, 1, 5};
         INDArray trainingSetArr = Nd4j.create(training, new int[]{4, 2}, 'c');
 
@@ -31,7 +31,7 @@ public class LinearRegressionTest {
     }
 
     @Test
-    public void computeCostTestCase2() {
+    public void computeCostSingleTestCase2() {
         double[] training = {1, 2, 3, 1, 3, 4, 1, 4, 5, 1, 5, 6};
         INDArray trainingSetArr = Nd4j.create(training, new int[]{4, 3}, 'c');
 
@@ -48,7 +48,7 @@ public class LinearRegressionTest {
     }
 
     @Test
-    public void computeCostTestCase3() {
+    public void computeCostSingleTestCase3() {
         INDArray fromFile = FileUtils.getFromFile("/ex1data1.txt");
 
         INDArray trainingSetArr = fromFile.getColumn(0);
@@ -61,7 +61,100 @@ public class LinearRegressionTest {
         double result = linearRegression.computeCost(concat, outputArr, thetaArr);
 
         assertEquals(32.07, result, 0.1);
+    }
 
+    @Test
+    public void computeCostMultiTestCase1() {
+        double[] training = {2, 1, 3, 7, 1, 9, 1, 8, 1, 3, 7, 4};
+        INDArray trainingSetArr = Nd4j.create(training, new int[]{4, 3}, 'c');
+
+        double[] output = {2, 5, 5, 6};
+        INDArray outputArr = Nd4j.create(output, new int[]{output.length, 1});
+
+        double[] theta = {0.4, 0.6, 0.8};
+        INDArray thetaArr = Nd4j.create(theta, new int[]{3, 1});
+
+        double result = linearRegression.computeCost(trainingSetArr, outputArr, thetaArr);
+
+        assertEquals(5.2950, result, 0.1);
+
+    }
+
+    @Test
+    public void gradientDescentTestCase1() {
+
+        double[] training = {1, 5, 1, 2, 1, 4, 1, 5};
+        INDArray trainingSetArr = Nd4j.create(training, new int[]{4, 2}, 'c');
+
+        double[] output = {1, 6, 4, 2};
+        INDArray outputArr = Nd4j.create(output, new int[]{output.length, 1});
+
+        double[] theta = {0, 0};
+        INDArray thetaArr = Nd4j.create(theta, new int[]{2, 1});
+
+        INDArray results = linearRegression.gradientDescent(trainingSetArr, outputArr, thetaArr, 0.01, 1000);
+
+        assertEquals(1, results.columns());
+        assertEquals(5.2148, results.getColumn(0).getDouble(0), 0.1);
+        assertEquals(-0.5733, results.getColumn(0).getDouble(1), 0.1);
+    }
+
+    @Test
+    public void gradientDescentTestCase2() {
+
+        double[] training = {1, 5, 1, 2};
+        INDArray trainingSetArr = Nd4j.create(training, new int[]{2, 2}, 'c');
+
+        double[] output = {1, 6};
+        INDArray outputArr = Nd4j.create(output, new int[]{output.length, 1});
+
+        double[] theta = {0.5, 0.5};
+        INDArray thetaArr = Nd4j.create(theta, new int[]{2, 1});
+
+        INDArray results = linearRegression.gradientDescent(trainingSetArr, outputArr, thetaArr, 0.1, 10);
+
+        assertEquals(1, results.columns());
+        assertEquals(1.70986, results.getColumn(0).getDouble(0), 0.1);
+        assertEquals(0.19229, results.getColumn(0).getDouble(1), 0.1);
+    }
+
+    // TODO load from file
+//    @Test
+//    public void gradientDescentTestCase3() {
+//
+//        double[] training = {1, 5, 1, 2};
+//        INDArray trainingSetArr = Nd4j.create(training, new int[]{2, 2}, 'c');
+//
+//        double[] output = {1, 6};
+//        INDArray outputArr = Nd4j.create(output, new int[]{output.length, 1});
+//
+//        double[] theta = {0.5, 0.5};
+//        INDArray thetaArr = Nd4j.create(theta, new int[]{2, 1});
+//
+//        INDArray results = linearRegression.gradientDescent(trainingSetArr, outputArr, thetaArr, 0.1, 10);
+//
+//        assertEquals(1, results.columns());
+//        assertEquals(1.70986, results.getColumn(0).getDouble(0), 0.1);
+//        assertEquals(0.19229, results.getColumn(0).getDouble(1), 0.1);
+//    }
+
+    @Test
+    public void gradientDescentMultiTestCase1() {
+
+        double[] training = {2, 1, 3, 7, 1, 9, 1, 8, 1, 3, 7, 4};
+        INDArray trainingSetArr = Nd4j.create(training, new int[]{4, 3}, 'c');
+
+        double[] output = {2, 5, 5, 6};
+        INDArray outputArr = Nd4j.create(output, new int[]{output.length, 1});
+
+        INDArray thetaArr = Nd4j.zeros(3, 1);
+
+        INDArray results = linearRegression.gradientDescent(trainingSetArr, outputArr, thetaArr, 0.01, 100);
+
+        assertEquals(1, results.columns());
+        assertEquals(0.23680, results.getColumn(0).getDouble(0), 0.1);
+        assertEquals(0.56524, results.getColumn(0).getDouble(1), 0.1);
+        assertEquals(0.31248, results.getColumn(0).getDouble(2), 0.1);
     }
 }
 
