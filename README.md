@@ -14,3 +14,10 @@ Libraries used
 
 
 TDD approach for all functions
+--------------------
+
+# ND4j cheatsheet
+Create arrays...
+Nd4j.zeros(3, 5)
+Nd4j.ones(3, 6)
+

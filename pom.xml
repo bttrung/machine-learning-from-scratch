@@ -11,15 +11,19 @@
 
 
     <dependencies>
-        <!--https://deeplearning4j.org/docs/latest/nd4j-overview-->
-        <!-- https://mvnrepository.com/artifact/org.nd4j/nd4j-base64 -->
         <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-base64</artifactId>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
             <version>1.0.0-beta3</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <!--DL4J relies on ND4J for hardware-specific implementations and tensor operations. Add a backend by pasting the following snippet into your pom.xml-->
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native-platform</artifactId>
+            <version>1.0.0-beta3</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
