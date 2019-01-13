@@ -1,4 +1,8 @@
 # Using Java to develop Machine Learning Algorithms by yourself from scratch
+This is a java implementation of the ML algorithms from Prof Andrew Ng's course: 
+https://www.coursera.org/learn/machine-learning/home/welcome
+
+--------------------
 
 Libraries used
 
