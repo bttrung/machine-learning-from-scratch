@@ -1,107 +1,67 @@
 package com.diy.ml.regression;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.util.ArrayUtil;
+import study.FileUtils;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class LinearRegressionTest {
 
     LinearRegression linearRegression = new LinearRegression();
 
+
     @Test
-    public void studyNd4j() {
+    public void computeCostTestCase1() {
+        double[] training = {1, 2, 1, 3, 1, 4, 1, 5};
+        INDArray trainingSetArr = Nd4j.create(training, new int[]{4, 2}, 'c');
 
-        //https://deeplearning4j.org/docs/latest/nd4j-overview#inmemory
+        double[] output = {7, 6, 5, 4};
+        INDArray outputArr = Nd4j.create(output, new int[]{output.length, 1});
 
-        INDArray ones = Nd4j.ones(2, 3);
-        System.out.printf(ones.toString());
+        double[] theta = {0.1, 0.2};
+        INDArray thetaArr = Nd4j.create(theta, new int[]{2, 1});
 
-        System.out.printf("\n----------\n");
-        INDArray zeros = Nd4j.zeros(2, 3);
-        System.out.printf(zeros.toString());
+        double result = linearRegression.computeCost(trainingSetArr, outputArr, thetaArr);
 
-        System.out.printf("\n---adding 10 to each value----------\n");
-        INDArray addi = zeros.addi(10);
-        System.out.printf(addi.toString());
-
-        // Random Arrays
-        System.out.printf("\n---random arrays----------\n");
-//        Nd4j.getRandom().setSeed(1000);
-        INDArray rand = Nd4j.rand(3, 2);
-        System.out.printf(rand.toString());
-
-
-        // Creating NDArrays from Java arrays
-        // row vector
-        double[] doubles = {1, 2, 3};
-        INDArray doublesND = Nd4j.create(doubles);
-        System.out.printf("\n---row vector----------\n");
-        System.out.printf(doublesND.toString());
-
-
-        // column vector
-        float[] floats = {1, 2, 3};
-        int[] ints = new int[]{floats.length, 1};
-        INDArray colVec = Nd4j.create(floats, ints);
-        System.out.printf("\n\n---column vector----------\n");
-        System.out.printf(colVec.toString());
-
-        // 2nd arrays
-        float[][] floats2d = new float[][]{
-                {2, 3, 1},
-                {4, 5, 6}
-        };
-        INDArray array2D = Nd4j.create(floats2d);
-        System.out.printf("\n\n---2d arrays----------\n");
-        System.out.printf(array2D.toString());
-
-        // from shape 2x4
-        double[] doubles1 = {1, 2, 3, 4, 5, 6, 7, 8};// 2x4 = 8 flat elements
-        int[] shape = {2, 4};// create array 2x4 dimension
-        INDArray fromShapeCOrder = Nd4j.create(doubles1, shape, 'c');
-        System.out.printf("\n\n---2d fromShapeC order----------\n");
-        System.out.printf(fromShapeCOrder.toString() + "\n");
-        System.out.printf(fromShapeCOrder.shapeInfoToString());
-
-        INDArray fromShapeFOrder = Nd4j.create(doubles1, shape, 'f');
-        System.out.printf("\n\n---2d fromShape F order----------\n");
-        System.out.printf(fromShapeFOrder.toString() + "\n");
-        System.out.printf(fromShapeFOrder.shapeInfoToString());
-
-        // create array from others
-        //Creating an exact copy of an existing NDArray
-        System.out.printf("\n\n---duplicated array----------\n");
-        INDArray dup = array2D.dup();
-        System.out.printf(dup.toString());
-
-        //Creating a subset array
-        INDArray hstack = Nd4j.hstack(ones, zeros);
-        System.out.printf("\n\n---hstack----------\n");
-        System.out.printf(hstack.toString());
-
-        INDArray vstack = Nd4j.vstack(ones, zeros);
-        System.out.printf("\n\n---vstack----------\n");
-        System.out.printf(vstack.toString());
-
-        // transport
-        INDArray transpose = zeros.transpose();
-        System.out.printf("\n\n---before transport----------\n");
-        System.out.printf(zeros.toString());
-        System.out.printf("\n\n---after transport----------\n");
-        System.out.printf(transpose.toString());
-        System.out.printf(transpose.shapeInfoToString());
-
-        // ND4J.concat: combines arrays along a dimension
+        assertEquals(11.9450, result, 0.1);
 
     }
 
     @Test
-    public void computeCostTest() {
-        long result = linearRegression.computeCost(Nd4j.ones(2, 2));
-        assertEquals(0, result);
+    public void computeCostTestCase2() {
+        double[] training = {1, 2, 3, 1, 3, 4, 1, 4, 5, 1, 5, 6};
+        INDArray trainingSetArr = Nd4j.create(training, new int[]{4, 3}, 'c');
+
+        double[] output = {7, 6, 5, 4};
+        INDArray outputArr = Nd4j.create(output, new int[]{output.length, 1});
+
+        double[] theta = {0.1, 0.2, 0.3};
+        INDArray thetaArr = Nd4j.create(theta, new int[]{3, 1});
+
+        double result = linearRegression.computeCost(trainingSetArr, outputArr, thetaArr);
+
+        assertEquals(7.0175, result, 0.1);
+
+    }
+
+    @Test
+    public void computeCostTestCase3() {
+        INDArray fromFile = FileUtils.getFromFile("/ex1data1.txt");
+
+        INDArray trainingSetArr = fromFile.getColumn(0);
+        INDArray ones = Nd4j.ones(trainingSetArr.rows(), 1);
+        INDArray concat = Nd4j.concat(1, ones, trainingSetArr);
+
+        INDArray outputArr = fromFile.getColumn(1);
+        INDArray thetaArr = Nd4j.zeros(2, 1);
+
+        double result = linearRegression.computeCost(concat, outputArr, thetaArr);
+
+        assertEquals(32.07, result, 0.1);
+
     }
 }
+

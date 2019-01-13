@@ -1,16 +1,15 @@
 package com.diy.ml.regression;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.DataSet;
-import org.nd4j.linalg.factory.Nd4j;
 
 public class LinearRegression {
-    public long computeCost(INDArray indArray) {
-//        INDArray indArray = Nd4j.createFromFlatArray();
+    public double computeCost(INDArray trainingInputs, INDArray actualOutput, INDArray theta) {
 
-//        DataSet dataSet;
-//        INDArray ones = Nd4j.ones(2, 3);
-//        System.out.printf(ones.toString());
-        return 0;
+        int m = actualOutput.rows();
+        INDArray hypothesis = trainingInputs.mmul(theta);
+//        INDArray errors = hypothesis.sub(actualOutput);
+//        double squaredDistance = errors.norm2Number().doubleValue();
+        double squaredDistance = hypothesis.squaredDistance(actualOutput);
+        return squaredDistance / (2 * m);
     }
 }
