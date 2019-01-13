@@ -1,4 +1,4 @@
-# Programming Machine Learning Algorithms by yourself from scratch
+# Using Java to develop Machine Learning Algorithms by yourself from scratch
 
 Libraries used
 
